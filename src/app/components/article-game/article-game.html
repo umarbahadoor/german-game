@@ -1,15 +1,32 @@
 <div class="game-container">
   <img [src]="current.image" alt="word image" class="word-image" (click)="playAudio()" />
 
-  <div class="choices">
-    <button (click)="choose('der')" class="choice choice--der">der</button>
-    <button (click)="choose('die')" class="choice choice--die">die</button>
-    <button (click)="choose('das')" class="choice choice--das">das</button>
-  </div>
+  @if (!feedback) {
+    <div class="choices">
+      <button (click)="choose('der')" class="choice choice--der">der</button>
+      <button (click)="choose('die')" class="choice choice--die">die</button>
+      <button (click)="choose('das')" class="choice choice--das">das</button>
+    </div>
+  }
 
   @if (feedback) {
+    <div class="actual-word">
+      <span
+        class="actual-word__article"
+        [class.der]="current.article==='der'"
+        [class.das]="current.article==='das'"
+        [class.die]="current.article==='die'"
+      >{{ current.article }}</span> {{ current.displayWord }}
+    </div>
+
     <div class="feedback" [class.correct]="feedback==='correct'" [class.wrong]="feedback==='wrong'">
       {{ feedback === 'correct' ? '✅ Super!' : '❌ Versuch’s nochmal!' }}
     </div>
+
+    @if (canContinue) {
+      <button (click)="goToNextWord()" class="continue-btn">Continue</button>
+    }
   }
+
+
 </div>

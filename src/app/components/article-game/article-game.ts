@@ -43,6 +43,7 @@ export class ArticleGame {
 
   current = this.randomWord();
   feedback: 'correct' | 'wrong' | null = null;
+  canContinue = false;
   private isLocked = false;
 
   randomWord(): WordItem {
@@ -62,20 +63,31 @@ export class ArticleGame {
     new Audio(this.current.audio).play();
   }
 
+  playAudioAndContinue() {
+    const audio = new Audio(this.current.audio);
+
+    audio.addEventListener('ended', () => {
+      this.canContinue = true;
+      this.cdr.detectChanges();
+    });
+
+    audio.play();
+  }
+
   choose(article: 'der' | 'die' | 'das') {
     if (this.isLocked) return;
     this.isLocked = true;
-
     this.feedback = article === this.current.article ? 'correct' : 'wrong';
     this.cdr.detectChanges();
-    const upcoming = this.nextWord();
+    this.playAudioAndContinue();
+  }
 
-    setTimeout(() => {
-      this.feedback = null;
-      this.current = upcoming;
-      this.isLocked = false;
-      this.cdr.detectChanges();
-      this.playAudio();
-    }, 1200);
+  goToNextWord() {
+    const upcoming = this.nextWord();
+    this.feedback = null;
+    this.current = upcoming;
+    this.isLocked = false;
+    this.canContinue = false;
+    this.cdr.detectChanges();
   }
 }

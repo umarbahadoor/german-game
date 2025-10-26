@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "build:gh": "rimraf docs && ng build --output-path docs --base-href /german-game/ && mv docs/browser/* docs/ && rimraf docs/browser && git add docs && git commit -m \"deploy: GitHub Pages build\" && git push"
   },
   "prettier": {
     "printWidth": 100,
@@ -42,6 +43,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "~5.9.2"
   }
 }
