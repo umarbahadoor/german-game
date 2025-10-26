@@ -45,6 +45,7 @@ export class ArticleGame {
   feedback: 'correct' | 'wrong' | null = null;
   canContinue = false;
   private isLocked = false;
+  private correctlyAnsweredIds = new Set<string>();
 
   randomWord(): WordItem {
     return this.words[Math.floor(Math.random() * this.words.length)];
@@ -52,11 +53,28 @@ export class ArticleGame {
 
   private nextWord(): WordItem {
     if (this.words.length <= 1) return this.current;
-    let next: WordItem;
-    do {
-      next = this.randomWord();
-    } while (next.id === this.current.id);
-    return next;
+
+    const notCorrect = this.words.filter(w => !this.correctlyAnsweredIds.has(w.id) && w.id !== this.current.id);
+    const correct = this.words.filter(w => this.correctlyAnsweredIds.has(w.id) && w.id !== this.current.id);
+
+    const pickCorrect = Math.random() < 0.2; // 20% chance to pick a previously-correct word
+
+    let pool: WordItem[] | null = null;
+    if (pickCorrect && correct.length > 0) {
+      pool = correct;
+    } else if (!pickCorrect && notCorrect.length > 0) {
+      pool = notCorrect;
+    } else if (notCorrect.length > 0) {
+      // Fallback: prefer unseen/uncorrected if available
+      pool = notCorrect;
+    } else if (correct.length > 0) {
+      pool = correct;
+    } else {
+      // Edge case: only one word or filtering removed all, fallback to any except current
+      pool = this.words.filter(w => w.id !== this.current.id);
+    }
+
+    return pool[Math.floor(Math.random() * pool.length)];
   }
 
   playAudio() {
@@ -77,7 +95,11 @@ export class ArticleGame {
   choose(article: 'der' | 'die' | 'das') {
     if (this.isLocked) return;
     this.isLocked = true;
-    this.feedback = article === this.current.article ? 'correct' : 'wrong';
+    const isCorrect = article === this.current.article;
+    this.feedback = isCorrect ? 'correct' : 'wrong';
+    if (isCorrect) {
+      this.correctlyAnsweredIds.add(this.current.id);
+    }
     this.cdr.detectChanges();
     this.playAudioAndContinue();
   }
