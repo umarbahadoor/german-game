@@ -11,12 +11,15 @@
 
   @if (feedback) {
     <div class="actual-word">
-      <span
-        class="actual-word__article"
-        [class.der]="current.article==='der'"
-        [class.das]="current.article==='das'"
-        [class.die]="current.article==='die'"
-      >{{ current.article }}</span> {{ current.displayWord }}
+      @for (a of getDisplayedArticlesArray(); track $index; let last = $last) {
+        <span
+          class="actual-word__article"
+          [class.der]="a==='der'"
+          [class.das]="a==='das'"
+          [class.die]="a==='die'"
+        >{{ a }}</span>@if (!last) {, }
+      }
+      {{ ' ' + current.displayWord }}
     </div>
 
     <div class="feedback" [class.correct]="feedback==='correct'" [class.wrong]="feedback==='wrong'">

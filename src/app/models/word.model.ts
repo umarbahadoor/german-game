@@ -1,6 +1,7 @@
 export interface WordItem {
   id: string;
-  article: 'der' | 'die' | 'das';
+  // Array of valid articles (first is considered primary for styling)
+  articles: Array<'der' | 'die' | 'das'>;
   image: string;
   audio: string;
   displayWord: string;
