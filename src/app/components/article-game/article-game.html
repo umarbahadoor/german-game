@@ -1,0 +1,15 @@
+<div class="game-container">
+  <img [src]="current.image" alt="word image" class="word-image" (click)="playAudio()" />
+
+  <div class="choices">
+    <button (click)="choose('der')" class="choice choice--der">der</button>
+    <button (click)="choose('die')" class="choice choice--die">die</button>
+    <button (click)="choose('das')" class="choice choice--das">das</button>
+  </div>
+
+  @if (feedback) {
+    <div class="feedback" [class.correct]="feedback==='correct'" [class.wrong]="feedback==='wrong'">
+      {{ feedback === 'correct' ? '✅ Super!' : '❌ Versuch’s nochmal!' }}
+    </div>
+  }
+</div>

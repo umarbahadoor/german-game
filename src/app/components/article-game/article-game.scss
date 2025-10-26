@@ -1,0 +1,41 @@
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+
+  .word-image {
+    width: 200px;
+    margin: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    &:active { transform: scale(0.95); }
+  }
+
+  .choices {
+    display: flex;
+    gap: 1rem;
+
+    button {
+      font-size: 1.5rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      border: none;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      &:hover { background-color: #ccc; }
+
+      &.choice--der { background-color: #fafafa; color: #4090e3; }
+      &.choice--das { background-color: #fafafa; color: #d1cd09; }
+      &.choice--die { background-color: #fafafa; color: #d10920; }
+
+    }
+  }
+
+  .feedback {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    &.correct { color: green; }
+    &.wrong { color: red; }
+  }
+}
