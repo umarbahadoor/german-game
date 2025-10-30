@@ -9,8 +9,7 @@ import { WORDS } from '../../data/words';
 })
 export class ArticleGame {
   constructor(private cdr: ChangeDetectorRef) {}
-  words: WordItem[] = WORDS;
-
+  words: WordItem[] = WORDS.filter(w => w.articles.length > 0);
 
   current = this.randomWord();
   feedback: 'correct' | 'wrong' | null = null;
